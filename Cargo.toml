@@ -1,0 +1,81 @@
+[workspace]
+members = ["meru-interface"]
+exclude = ["super-sabicom"]
+
+[package]
+name = "meru"
+version = "0.3.0"
+edition = "2021"
+authors = ["Hideyuki Tanaka <tanaka.hideyuki@gmail.com>"]
+license = "MIT"
+
+description = "Multi game console Emulator written in Rust"
+repository = "https://github.com/tanakh/meru"
+readme = "README.md"
+categories = ["emulators"]
+keywords = ["emulators"]
+
+[dependencies]
+meru-interface = { path = "meru-interface", version = "0.3.0" }
+sabicom = { path = "sabicom", version = "0.2.0" }
+super-sabicom = { path = "super-sabicom", version = "0.2.0" }
+tgbr = { path = "tgbr", version = "0.4.0" }
+tgba = { path = "tgba", version = "0.3.0" }
+
+anyhow = "1.0.63"
+async-channel = "1.7.1"
+async-std = { version = "1.12.0", features = ["attributes"] }
+bincode = "1.3.3"
+bevy = { version = "0.8.1", default-features = false, features = [
+    "bevy_audio",
+    "bevy_gilrs",
+    "bevy_winit",
+    "render",
+] }
+bevy_easings = "0.8.1"
+bevy_egui = "0.16.0"
+bevy_tiled_camera = "0.4.1"
+cfg-if = "1.0.0"
+chrono = "0.4.22"
+directories = "4.0.1"
+either = "1.8.0"
+enum-iterator = "1.2.0"
+image = { version = "0.24.3", default-features = false, features = ["ico"] }
+log = "0.4.17"
+rfd = "0.10.0"
+rodio = { version = "0.15.0", default-features = false }
+schemars = "0.8.10"
+serde = { version = "1.0.144", features = ["derive"] }
+serde_json = "1.0.85"
+thiserror = "1.0.33"
+tempfile = "3.3.0"
+winit = "0.26" # bevy_winit-0.8.1 depends on 0.25.x
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+compress-tools = "0.13.0"
+futures = { version = "0.3.24" }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+indexed_db_futures = "0.2.3"
+js-sys = "0.3.59"
+url = "2.2.2"
+wasm-bindgen = { version = "0.2.82", features = ["serde-serialize"] }
+web-sys = "0.3.59"
+zip = { version = "0.6.2", default-features = false, features = ["deflate"] }
+
+[build-dependencies]
+winres = "0.1"
+
+[profile.release]
+lto = true
+
+[package.metadata.vcpkg]
+git = "https://github.com/microsoft/vcpkg"
+branch = "master"
+dependencies = ["libarchive"]
+
+[package.metadata.vcpkg.target]
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
+
+[patch.crates-io]
+meru-interface = { path = "meru-interface" }
